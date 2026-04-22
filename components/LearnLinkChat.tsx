@@ -47,11 +47,25 @@ export default function LearnLinkChat() {
     
     let simulatedResponse = "";
     if (assistantMessageCount === 0) {
-      simulatedResponse = "Here are some resources for web dev.";
+      simulatedResponse = `Here are some resources for web dev:
+
+- **[Computer Science for Web Programming](https://www.classcentral.com/course/harvardx-computer-science-for-web-programming-18465)** by edX
+- **[JavaScript Algorithms and Data Structures](https://www.classcentral.com/course/freecodecamp-javascript-algorithms-and-data-struc-34060)** by freeCodeCamp
+- **[HTML and CSS Tutorial - Create a Website for Beginners](https://www.classcentral.com/classroom/freecodecamp-html-and-css-tutorial-create-a-website-for-beginners-57869)** by freeCodeCamp`;
+
     } else if (assistantMessageCount === 1) {
-      simulatedResponse = "Here are some resources for data science.";
+      simulatedResponse = `Here are some resources for data science:
+
+- **[Neural Networks and Deep Learning](https://www.classcentral.com/course/neural-networks-deep-learning-9058)** by Coursera
+- **[Machine Learning for Musicians and Artists](https://www.classcentral.com/course/kadenze-machine-learning-for-musicians-and-artists-3768)** by Kadenze
+- **[Introduction to Deep Learning](https://www.classcentral.com/classroom/youtube-mit-6-s191-introduction-to-deep-learning-53113)** by YouTube`;
+
     } else {
-      simulatedResponse = "Here are some resources for cloud computing.";
+      simulatedResponse = `Here are some resources for cloud computing:
+
+- **[AWS Machine Learning Engineer Nanodegree](https://www.classcentral.com/course/udacity-aws-machine-learning-engineer-nanodegree--nd189-18213)** by Udacity
+- **[Cloud Computing Concepts: Part 2](https://www.classcentral.com/course/cloudcomputing2-2942)** by Coursera
+- **[Cloud Computing Applications](https://www.classcentral.com/course/cloudapplications-2944)** by Coursera`;
     }
 
     setTimeout(() => {
