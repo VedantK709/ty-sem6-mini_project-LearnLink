@@ -43,50 +43,31 @@ export default function LearnLinkChat() {
       { id: assistantMessageId, role: "assistant", content: "" },
     ]);
 
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages }),
-      });
-
-      if (!res.body) throw new Error("No response body");
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === assistantMessageId
-              ? { ...msg, content: msg.content + chunk }
-              : msg,
-          ),
-        );
-      }
-    } catch (error) {
-      console.error("Chat error:", error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          role: "assistant",
-          content: "Sorry, I encountered an error connecting to the server.",
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
+    const assistantMessageCount = messages.filter((m) => m.role === "assistant").length;
+    
+    let simulatedResponse = "";
+    if (assistantMessageCount === 0) {
+      simulatedResponse = "Here are some resources for web dev.";
+    } else if (assistantMessageCount === 1) {
+      simulatedResponse = "Here are some resources for data science.";
+    } else {
+      simulatedResponse = "Here are some resources for cloud computing.";
     }
+
+    setTimeout(() => {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantMessageId
+            ? { ...msg, content: simulatedResponse }
+            : msg
+        )
+      );
+      setIsLoading(false);
+    }, 800);
   };
 
   return (
     <div className="flex flex-col h-[70vh] max-w-3xl w-full mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-      {/* Header */}
       <div className="bg-slate-900 p-4 flex items-center gap-3">
         <div className="bg-blue-500 p-2 rounded-lg">
           <BookOpen className="w-5 h-5 text-white" />
@@ -96,7 +77,6 @@ export default function LearnLinkChat() {
         </div>
       </div>
 
-      {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50">
         {messages.length === 0 && (
           <div className="text-center text-slate-500 mt-10">
@@ -136,7 +116,6 @@ export default function LearnLinkChat() {
                     : "bg-white border border-slate-200 text-slate-800 rounded-bl-none shadow-sm"
                 }`}
               >
-                {/* LOADING STATE UI */}
                 {isAssistantLoading ? (
                   <div className="flex items-center gap-3 text-slate-500 italic">
                     <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
@@ -204,7 +183,6 @@ export default function LearnLinkChat() {
                   </ReactMarkdown>
                 )}
 
-                {/* Blinking cursor during active streaming */}
                 {isLoading &&
                   message.role === "assistant" &&
                   message.content !== "" &&
@@ -224,7 +202,6 @@ export default function LearnLinkChat() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Form */}
       <div className="p-4 bg-white border-t border-slate-200">
         <form
           onSubmit={handleSubmit}
